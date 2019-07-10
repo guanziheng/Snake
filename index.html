@@ -1,0 +1,258 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>贪吃蛇</title>
+    <style type="text/css">
+    		body{
+    			background: #fff;
+    			overflow-x: hidden;
+    			overflow-y: hidden;
+    		}
+    		#gameCanvas{
+    			position: absolute;
+    			top: 0px;
+    			left: 0px;
+    		}
+    		.box{
+    			position: absolute;
+    			/*right: 0;*/
+    			bottom: 0px;
+    			width: 158px;
+    			height: 158px;
+    			/*background: #f66;*/
+    		}
+    		.box div{
+    			width: 50px;
+    			height: 50px;
+    			/*background: #f66;*/
+    			background: wheat;
+    			border-radius: 10px;
+    		}
+    		.box div img{
+    			margin: 10px;
+    			width: 30px;
+    			height: 30px;
+    		}
+    		#up{
+    			position: absolute;
+    			top: 0;
+    			left: 52px;
+    		}
+    		#down{
+    			position: absolute;
+    			top: 104px;
+    			left: 52px;
+    		}
+    		#left{
+    			position: absolute;
+    			top: 52px;
+    			left: 0;
+    		}
+    		#right{
+    			position: absolute;
+    			top: 52px;
+    			left: 104px;
+    		}
+    		#pause{
+    			position: absolute;
+    			top: 52px;
+    			left: 52px;
+    		}
+    		.score_box{
+    			position: absolute;
+    			left: 0;
+    			width: 120px;
+    			height: 30px;
+    		}
+    		.score_img{
+    			width: 30px;
+    			height: 30px;
+    			float: left;
+    		}
+    		#score{
+    			float: left;
+    			margin-left: 5px;
+    			font-size: 24px;
+    			color: #f66;
+    			line-height: 30px;
+    		}
+    		.skill_box{
+    			position: absolute;
+    			width: 160px;
+    			height: 50px;
+    			/*background: #f66;*/
+    		}
+    		.small_skill_box{
+    			width: 40px;
+    			height: 50px;
+    			margin: 0;
+    			/*background: #ff6;*/
+    			float: left;
+    		}
+    		.skill_img{
+    			width: 36px;
+    			height: 36px;
+    			margin: 0 2px;
+    			background: wheat;
+    			/*border: 2px wheat solid;*/
+    			border-radius: 10px;
+    		}
+    		.skill_img img{
+    			width: 28px;
+    			height: 28px;
+    			margin: 4px;
+    		}
+    		#fourth_skill .skill_img{
+    			/*border: none;*/
+    			background: #f66;
+    		}
+    		.skill_chance{
+    			color: #f66;
+    			font-size: 12px;
+    			text-align: center;
+    		}
+    		.notice_box{
+    			position: absolute;
+    			left: 0;
+    			width: 100%;
+    			height: 30px;
+    		}
+    		.notice_img{
+    			width: 30px;
+    			height: 30px;
+    			float: left;
+    		}
+    		#notice{
+    			float: left;
+    			margin-left: 5px;
+    			font-size: 14px;
+    			color: #f66;
+    			line-height: 27px;
+    		}
+    		.fruit_box{
+    			position: absolute;
+    			right: 0;
+    			width: 100px;
+    			height: 30px;
+    		}
+    		.fruit_img{
+    			width: 26px;
+    			height: 26px;
+    			margin: 2px;
+    			float: left;
+    		}
+    		#fruit{
+    			float: left;
+    			margin-left: 5px;
+    			font-size: 14px;
+    			color: #f66;
+    			line-height: 30px;
+    		}
+    		.last_score_box{
+    			position: absolute;
+    			width: 200px;
+    			height: 100px;
+    			color: #fff;
+    			display: none;
+    		}
+    		.text{
+    			font-size: 40px;
+    			width: 200px;
+    			height: 50px;
+    			text-align: center;
+    		}
+    		#last_score{
+    			font-size: 40px;
+    			width: 200px;
+    			height: 50px;
+    			text-align: center;
+    		}
+    		#best_score{
+    			position: absolute;
+    			font-size: 20px;
+    			text-align: right;
+    			width: 200px;
+    			height: 30px;
+    			top: 10px;
+    			color: #fff;
+    			display: none;
+    		}
+    		#replay{
+    			position: absolute;
+    			width: 64px;
+    			height: 64px;
+    			display: none;
+    		}
+    </style>
+</head>
+<body>
+	<canvas id="gameCanvas"></canvas>
+	<div class="score_box">
+		<img class="score_img" src="img/score.png" />
+		<div id="score">0</div>
+	</div>
+	<div class="last_score_box">
+		<div class="text">本次得分</div>
+		<div id="last_score">0</div>
+	</div>
+	<div id="best_score">最高得分：0</div>
+	<div class="skill_box">
+		<div class="small_skill_box" id="first_skill" title="逆转乾坤：主动技能（快捷键A），在集齐任意10颗果实后可使用，使用后可随机召唤一颗新的果实替代当前果实">
+			<div class="skill_img">
+				<img src="img/nzqk.png" />
+			</div>
+			<div class="skill_chance" id="nzqk">0/10</div>
+		</div>
+		<div class="small_skill_box" id="second_skill" title="仁者无敌：主动技能（快捷键S），在集齐3颗隐身果实后可使用，使用后进入无敌模式，效果同无敌果实">
+			<div class="skill_img">
+				<img src="img/rzwd.png" />
+			</div>
+			<div class="skill_chance" id="nzqk">0/3</div>
+		</div>
+		<div class="small_skill_box" id="third_skill" title="天使降临：主动技能（快捷键D），在集齐除普通果实外的其他所有果实后即可召唤一颗天使果实">
+			<div class="skill_img">
+				<img src="img/tsjl.png" />
+			</div>
+			<div class="skill_chance" id="nzqk">0/16</div>
+		</div>
+		<div class="small_skill_box" id="fourth_skill" title="化险为夷：被动技能，在吃到减分果实后有一定的概率免疫">
+			<div class="skill_img">
+				<img src="img/hxwy.png" />
+			</div>
+			<div class="skill_chance" id="nzqk">0%</div>
+		</div>
+	</div>
+	<div class="notice_box">
+		<img class="notice_img" src="img/notice.png"/>
+		<div id="notice">你吃到了饥饿果实，分数加5，长度减1</div>
+	</div>
+	<div class="fruit_box">
+		<img class="fruit_img" src="img/fruit.png"/>
+		<div id="fruit">普通果实</div>
+	</div>
+	<div id="replay">
+		<img src="img/replay.png" />
+	</div>
+	<div class="box">
+		<div id="up">
+			<img src="img/up.png" />
+		</div>
+		<div id="down">
+			<img src="img/down.png" />
+		</div>
+		<div id="left">
+			<img src="img/left.png" />
+		</div>
+		<div id="right">
+			<img src="img/right.png" />
+		</div>
+		<div id="pause">
+			<img src="img/pause.png" />
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="js/zepto_1.1.3.js" ></script>
+<script type="text/javascript" src="js/snake.js" ></script>
+</html>
