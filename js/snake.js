@@ -94,7 +94,7 @@ $("#replay").click(function(){
 	$("#third_skill .skill_chance").html(third_skill_arry.length+"/16");
 	$("#third_skill .skill_img").css("background","wheat");
 })
-$("body").on("touchstart", function(e) {
+/*$("body").on("touchstart", function(e) {
     startX = e.changedTouches[0].pageX;
     startY = e.changedTouches[0].pageY;
 });
@@ -119,7 +119,7 @@ $("body").on("touchend", function(e) {
     else if(moveY<-30){
         keyDown(38);
     }
-});
+});*/
 window.onload=function(){
 	var canvas=document.getElementById("gameCanvas");
 	canvas.width=windowWidth;
